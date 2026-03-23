@@ -35,7 +35,7 @@ npx wrangler pages secret put COINCAP_API_KEY
 
 Notes:
 - Secret is read by [functions/api/assets.ts](functions/api/assets.ts).
-- Optional server env `COINCAP_API_BASE_URL` defaults to `https://pro.coincap.io`.
+- Optional server env `COINCAP_API_BASE_URL` defaults to `https://rest.coincap.io`.
 
 ## Scripts
 

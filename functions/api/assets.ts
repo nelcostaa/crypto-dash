@@ -24,11 +24,11 @@ export async function onRequestGet(context: PagesContext) {
     }
 
     const baseUrl =
-        context.env.COINCAP_API_BASE_URL?.trim().replace(/\/+$/, '') || 'https://pro.coincap.io'
+        context.env.COINCAP_API_BASE_URL?.trim().replace(/\/+$/, '') || 'https://rest.coincap.io'
 
     const requestUrl = new URL(context.request.url)
     const query = requestUrl.searchParams.toString()
-    const upstreamUrl = `${baseUrl}/v2/assets${query ? `?${query}` : ''}`
+    const upstreamUrl = `${baseUrl}/v3/assets${query ? `?${query}` : ''}`
 
     const upstreamResponse = await fetch(upstreamUrl, {
         method: 'GET',
@@ -43,7 +43,7 @@ export async function onRequestGet(context: PagesContext) {
     return new Response(body, {
         status: upstreamResponse.status,
         headers: {
-            'content-type': 'application/json; charset=utf-8',
+            'content-type': upstreamResponse.headers.get('content-type') ?? 'application/json; charset=utf-8',
             'cache-control': 'public, max-age=30',
         },
     })
