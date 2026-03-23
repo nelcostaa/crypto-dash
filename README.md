@@ -22,16 +22,20 @@ Crypto dashboard built with React + Vite + TypeScript.
 
 ## Environment variables
 
-Create a local `.env` file:
+This app now fetches CoinCap through a Cloudflare Pages Function (`/api/assets`).
+The CoinCap API key is server-side only.
+
+Client-side `.env` is optional and should not contain CoinCap secrets.
+
+Set Cloudflare Pages secret:
 
 ```bash
-VITE_COINCAP_API_BASE_URL=https://pro.coincap.io
-VITE_COINCAP_API_KEY=your_coincap_api_key
+npx wrangler pages secret put COINCAP_API_KEY
 ```
 
 Notes:
-- `VITE_COINCAP_API_KEY` is used as `Authorization: Bearer <key>`.
-- Base URL defaults to `https://pro.coincap.io` if not provided.
+- Secret is read by [functions/api/assets.ts](functions/api/assets.ts).
+- Optional server env `COINCAP_API_BASE_URL` defaults to `https://pro.coincap.io`.
 
 ## Scripts
 
