@@ -1,47 +1,52 @@
-# Crypto Dash - Project Specification & AI Context
+# Crypto Dash
 
-## 🎯 Project Overview
-This is a modern React application that acts as a real-time cryptocurrency dashboard. It fetches data from the CoinCap API, displays it in a highly styled data table, and is configured for edge deployment on Cloudflare Pages.
+Crypto dashboard built with React + Vite + TypeScript.
 
-## 🛠️ Tech Stack & Environment
-- **Framework:** React 18+ via Vite (TypeScript template)
-- **Styling:** Tailwind CSS v4
-- **UI Components:** shadcn/ui (using the **Base UI** library and **Vega** preset)
-- **Data Fetching:** `@tanstack/react-query`
-- **HTTP Client:** `ky`
-- **Deployment:** Cloudflare Pages via `wrangler`
+## Requested checklist
 
-> **⚠️ CRITICAL CONTEXT FOR AI ASSISTANT ⚠️**
-> - **Tailwind v4 Setup:** This project uses Tailwind v4. There is no `tailwind.config.js` or PostCSS. Global CSS is handled in `src/index.css` via `@import "tailwindcss";`. 
-> - **Shadcn Workaround:** `src/index.css` contains a dummy `/* @tailwind base */` comment to bypass a known shadcn CLI validation bug. Do not remove it.
-> - **Path Aliasing:** The `@/` alias is configured in `vite.config.ts` and the root `tsconfig.json`.
+- [x] Create repo with React app based on Vite with React Query, `ky`, and shadcn UI
+- [x] Connect CoinCap API (`https://pro.coincap.io/api-docs`) via reusable API client
+- [x] Create page showing coin list with shadcn table and 60s auto-refetch
+- [x] Display required columns: `name`, `symbol`, `priceUsd`, `changePercent24Hr`, `marketCapUsd`, `volumeUsd24Hr`, `supply/maxSupply`
+- [x] Add red/green styles for `changePercent24Hr` and related value emphasis (`priceUsd`)
+- [x] Add npm deploy script for Cloudflare using wrangler
+- [ ] Create fake account using fakemail.net (manual step outside repo automation)
 
----
+## Stack
 
-## 📋 Feature Requirements
+- React + Vite + TypeScript
+- shadcn UI components
+- `@tanstack/react-query`
+- `ky`
+- Cloudflare Pages deploy with `wrangler`
 
-### 1. Data Layer (CoinCap API)
-- **Endpoint:** `https://api.coincap.io/v2/assets` (Public/Free tier is sufficient for now).
-- **Client:** Use `ky` to create a reusable API client instance.
-- **State Management:** Use `useQuery` from React Query to fetch the list of assets.
-- **Polling:** The query MUST refetch automatically every 60 seconds.
+## Environment variables
 
-### 2. UI Layer (The Coin Table)
-- **Component:** Use the `shadcn/ui` Table component to display the data.
-- **Required Columns:**
-  1. Name
-  2. Symbol
-  3. Price (USD)
-  4. 24h Change (%)
-  5. Market Cap (USD)
-  6. Volume 24h (USD)
-  7. Supply / Max Supply
-- **Styling Rules:** - The `changePercent24Hr` column MUST be color-coded: Green for positive values, Red for negative values.
-  - Apply formatting to large numbers (e.g., standardizing USD currency formats and condensing large market cap/volume numbers if necessary).
+Create a local `.env` file:
 
-### 3. Deployment (Cloudflare)
-- **Tooling:** Use `wrangler`.
-- **NPM Script:** Create a specific npm script in `package.json` for deployment:
-  ```json
-  "deploy:cf": "npm run build && wrangler pages deploy dist --project-name crypto-dash"
-# React + TypeScript + Vite
+```bash
+VITE_COINCAP_API_BASE_URL=https://pro.coincap.io
+VITE_COINCAP_API_KEY=your_coincap_api_key
+```
+
+Notes:
+- `VITE_COINCAP_API_KEY` is used as `Authorization: Bearer <key>`.
+- Base URL defaults to `https://pro.coincap.io` if not provided.
+
+## Scripts
+
+- `npm run dev` - start development server
+- `npm run build` - production build
+- `npm run lint` - lint project
+- `npm run preview` - preview production build
+- `npm run deploy:cf` - build and deploy to Cloudflare Pages
+
+## Cloudflare deployment
+
+The deployment command is:
+
+```bash
+npm run build && wrangler pages deploy dist --project-name crypto-dash
+```
+
+Before first deploy, authenticate wrangler and create the Pages project if needed.
