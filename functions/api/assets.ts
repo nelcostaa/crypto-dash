@@ -30,21 +30,33 @@ export async function onRequestGet(context: PagesContext) {
     const query = requestUrl.searchParams.toString()
     const upstreamUrl = `${baseUrl}/v3/assets${query ? `?${query}` : ''}`
 
-    const upstreamResponse = await fetch(upstreamUrl, {
-        method: 'GET',
-        headers: {
-            Authorization: `Bearer ${apiKey}`,
-            Accept: 'application/json',
-        },
-    })
+    try {
+        const upstreamResponse = await fetch(upstreamUrl, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                Accept: 'application/json',
+            },
+        })
 
-    const body = await upstreamResponse.text()
+        const body = await upstreamResponse.text()
 
-    return new Response(body, {
-        status: upstreamResponse.status,
-        headers: {
-            'content-type': upstreamResponse.headers.get('content-type') ?? 'application/json; charset=utf-8',
-            'cache-control': 'public, max-age=30',
-        },
-    })
+        return new Response(body, {
+            status: upstreamResponse.status,
+            headers: {
+                'content-type': upstreamResponse.headers.get('content-type') ?? 'application/json; charset=utf-8',
+                'cache-control': 'public, max-age=30',
+            },
+        })
+    } catch {
+        return new Response(
+            JSON.stringify({ error: 'Failed to reach CoinCap upstream API.' }),
+            {
+                status: 502,
+                headers: {
+                    'content-type': 'application/json; charset=utf-8',
+                },
+            }
+        )
+    }
 }
