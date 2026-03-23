@@ -154,10 +154,14 @@ function App() {
                   >
                     {formatChangePercent(asset.changePercent24Hr)}
                   </TableCell>
-                  <TableCell className="text-right text-muted-foreground">
+                  <TableCell
+                    className={cn('text-right', changeColor(asset.changePercent24Hr))}
+                  >
                     {formatUsd(asset.marketCapUsd, true)}
                   </TableCell>
-                  <TableCell className="text-right text-muted-foreground">
+                  <TableCell
+                    className={cn('text-right', changeColor(asset.changePercent24Hr))}
+                  >
                     {formatUsd(asset.volumeUsd24Hr, true)}
                   </TableCell>
                   <TableCell className="text-right text-muted-foreground">
